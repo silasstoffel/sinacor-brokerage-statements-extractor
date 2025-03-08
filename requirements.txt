@@ -37,7 +37,7 @@ pdfminer.six==20231228
 pdfplumber==0.11.5
 pillow==11.1.0
 pop-transition==1.1.2
-protobuf==3.12.4
+protobuf==3.18.3
 pycairo==1.20.1
 pycparser==2.22
 pycups==2.0.1
