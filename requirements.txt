@@ -31,7 +31,7 @@ more-itertools==8.10.0
 netaddr==0.8.0
 netifaces==0.11.0
 numpy==2.2.3
-oauthlib==3.2.0
+oauthlib==3.2.2
 pandas==2.2.3
 pdfminer.six==20231228
 pdfplumber==0.11.5
