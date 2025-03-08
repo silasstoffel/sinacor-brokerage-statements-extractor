@@ -1,16 +1,23 @@
 import pdfplumber
 import re
 import pandas as pd
+import sys
 
 def main():
     print("\n### Brokerage Statements Extractor ###\n")
-    pdf_path = "02_20.pdf"
+    
+    if len(sys.argv) < 2:
+        print("Please provide the path to the PDF file as an argument.")
+        sys.exit(1)
+    
+    filename = sys.argv[1]
 
     operations = []
     operation_total_value = None
     liquidation_value = None
     exchange_fees_value = None
-    with pdfplumber.open(pdf_path) as pdf:
+    
+    with pdfplumber.open(filename) as pdf:
         for page in pdf.pages:
             text = page.extract_text()
 
