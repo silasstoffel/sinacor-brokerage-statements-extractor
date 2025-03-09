@@ -2,7 +2,7 @@
 
 Sinacor data extractor pattern (brokerage statements)
 
-
+### How use it
 ```shell
 # input
 python3 main.py brokerage-statements.pdf
@@ -20,3 +20,7 @@ python3 main.py brokerage-statements.pdf
 
 Extraction completed. Filename: ./outputs/operation_20250309_172348.csv
 ```
+
+### Supported Exchanges
+
+- CLEAR CORRETORA - GRUPO XP (beta)
