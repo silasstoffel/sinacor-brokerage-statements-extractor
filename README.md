@@ -10,6 +10,10 @@ pip install -r requirements.txt
 
 ### How use it
 
+**PDF Input**
+![Brokerage Statement](./docs/brokerage-statement.png)
+
+
 **Input and Output CLI Mode**
 ```shell
 # input
