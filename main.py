@@ -4,7 +4,7 @@ import pandas as pd
 import sys
 
 from symbol import search_symbol
-
+from datetime import datetime
 def main():
     print("\n### Brokerage Statements Extractor ###\n")
     
@@ -31,8 +31,8 @@ def main():
                 exchange_fees_value = extract_exchange_fees_value(text)
                 costs = liquidation_value + exchange_fees_value
                 split_operation_costs(operations, costs, operation_total_value)
-                
-    to_csv(operations)
+
+    filename = to_csv(operations)
 
     print("############# Extraction Report #############")
     print("(-) Liquidation Value: R$", liquidation_value)
@@ -41,7 +41,7 @@ def main():
     print("(!) Operation Total Value: R$", operation_total_value)
     print("#############################################")
 
-    print("\nExtraction completed. Check the 'outputs' folder for the CSV file.\n")
+    print("\nExtraction completed. Filename:", filename, "\n")
 
 def extract_numeric_value(text, pattern, group = 1):
     match = re.compile(pattern).search(text)
@@ -126,8 +126,11 @@ def to_csv(operations):
         ])
 
     #print("Extracted Operations:\n", records, "\n") 
-    
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"./outputs/operation_{timestamp}.csv"
     df_operations = pd.DataFrame(records, columns=["Date", "Operation type", "Symbol", "Quantity", "Unity Price", "Costs", "Total Value", "Raw Data"])
-    df_operations.to_csv("./outputs/operations.csv", index=False)
+    df_operations.to_csv(filename, index=False)
+
+    return filename
 
 main()
