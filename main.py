@@ -108,7 +108,8 @@ def extract_operations(text):
 
 def split_operation_costs(operations, costs, operation_total_value):
     for o in operations:
-        o["costs"] = round(costs * o["total_value"] / operation_total_value, 2)
+        if costs > 0:
+            o["costs"] = round(costs * o["total_value"] / operation_total_value, 2)
     return operations
 
 def to_csv(operations):
