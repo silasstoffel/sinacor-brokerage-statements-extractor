@@ -3,6 +3,8 @@ import re
 import pandas as pd
 import sys
 
+from symbol import search_symbol
+
 def main():
     print("\n### Brokerage Statements Extractor ###\n")
     
@@ -16,7 +18,7 @@ def main():
     operation_total_value = None
     liquidation_value = None
     exchange_fees_value = None
-    
+
     with pdfplumber.open(filename) as pdf:
         for page in pdf.pages:
             text = page.extract_text()
@@ -32,11 +34,12 @@ def main():
                 
     to_csv(operations)
 
-    print("######### Report #########")
-    print("Liquidation Value:", liquidation_value)
-    print("Exchange Fees Value:", exchange_fees_value)
-    print("Operation Total Value:", operation_total_value)
-    print("###########################")
+    print("############# Extraction Report #############")
+    print("(-) Liquidation Value: R$", liquidation_value)
+    print("(-) Exchange Fees Value: R$", exchange_fees_value)
+    print("(-) Total Costs: R$", costs)
+    print("(!) Operation Total Value: R$", operation_total_value)
+    print("#############################################")
 
     print("\nExtraction completed. Check the 'outputs' folder for the CSV file.\n")
 
@@ -55,31 +58,49 @@ def extract_exchange_fees_value(text):
 def extract_operation_total_value(text):
     return extract_numeric_value(text, r"Valor das operações\s+([\d,.]+)")
 
+def extract_operation_type(text):
+    b3 = "B3 RV LISTADO"
+    bovespa = "1-BOVESPA"
+
+    operation_type = (text.replace(b3, "").replace(bovespa, "")).strip()[:1]
+
+    if operation_type == "C":
+        return "C"
+    elif operation_type == "V":
+        return "V"
+    
+    return "UNKNOWN"
+
 def extract_operations(text):
     operations = []
-    
+    txt = re.sub(r"\s+", " ", text)
     date_pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
-    order_pattern = re.compile(
-        r"B3 RV LISTADO\s+(C|V)\s+VISTA\s+([A-Z0-9\s]+)\s+([A-Z0-9]+)\s+CI\s+#?\s*(\d+)\s+([\d,.]+)\s+([\d,.]+) D"
-    )
+    pattern = re.compile(r"(B3 RV LISTADO|1-BOVESPA) (.*?) (\d+\s+[\d,.]+\s+[\d,.]+ [DC])")
 
     match_operation_date = date_pattern.search(text.replace("\n", " "))
     if match_operation_date:
         operation_date = match_operation_date.group(0)
 
-    for match in order_pattern.finditer(text):
-        operation_type = match.group(1)
-        symbol = match.group(3).strip()
-        quantity = int(match.group(4)) 
-        unit_price = float(match.group(5).replace(".", "").replace(",", "."))
-        value = float(match.group(6).replace(".", "").replace(",", "."))
+    matches = pattern.findall(txt)
+
+    for match in matches:
+        text_chunk = f"{match[0]} {match[1]}".strip()
+        numbers_chunk = match[2].strip()
+        raw_data = f"{text_chunk} {numbers_chunk}"
+        values = numbers_chunk.split(" ")
+        quantity = int(values[0])
+        unit_price = float(values[1].replace(".", "").replace(",", "."))
+        total_value = float(values[2].replace(".", "").replace(",", "."))
+        #print("Raw Data:", raw_data)
+
         operations.append({
+            "raw_data": raw_data, 
             "operation_date": operation_date,
-            "operation_type": operation_type,
-            "symbol": symbol,
+            "operation_type": extract_operation_type(text_chunk),
+            "symbol": search_symbol(text_chunk, 'CLEAR'),
             "quantity": quantity,
             "unity_price": unit_price,
-            "total_value": value,
+            "total_value": total_value,
             "costs": 0
         })
 
@@ -100,12 +121,13 @@ def to_csv(operations):
             operation["quantity"],
             operation["unity_price"],
             operation["costs"],
-            operation["total_value"]
+            operation["total_value"],
+            operation["raw_data"]
         ])
 
-    print("Extracted Operations:\n", records, "\n") 
+    #print("Extracted Operations:\n", records, "\n") 
     
-    df_operations = pd.DataFrame(records, columns=["Date", "Operation type", "Symbol", "Quantity", "Unity Price", "Costs", "Total Value"])
+    df_operations = pd.DataFrame(records, columns=["Date", "Operation type", "Symbol", "Quantity", "Unity Price", "Costs", "Total Value", "Raw Data"])
     df_operations.to_csv("./outputs/operations.csv", index=False)
 
 main()
