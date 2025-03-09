@@ -5,7 +5,7 @@ Sinacor data extractor pattern (brokerage statements)
 
 ```shell
 # input
-python3 main.py note.pdf
+python3 main.py brokerage-statements.pdf
 
 #output:
 
