@@ -2,6 +2,12 @@
 
 Sinacor data extractor pattern (brokerage statements)
 
+### Setup
+
+```shell
+pip install -r requirements.txt
+```
+
 ### How use it
 ```shell
 # input
