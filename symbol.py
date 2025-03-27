@@ -7,13 +7,16 @@ clear_symbols = {
     'HYPERA': 'HYPE3',
     'ITAUUNIBANCO ON EJ N1': 'ITUB3',
 
-    # FIIS
+    # FIIs
     'ITRI': 'ITRI11',
     'PORD': 'PORD11',
     'MALL11': 'MALL11',
     'RFOF11': 'RFOF11',
     'IRDM11': 'IRDM11',
     'KNRI11': 'KNRI11',
+    'BARI11': 'BARI11',
+    'BTHF11': 'BTHF11',
+    'CLIN11': 'CLIN11',
 
     # ETFs
     'ISHARES SMAL CI': 'SMLL11',
