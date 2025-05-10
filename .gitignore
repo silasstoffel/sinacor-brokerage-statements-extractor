@@ -3,6 +3,9 @@
 outputs/*
 !outputs/.gitkeep
 
+inputs/*
+!inputs/.gitkeep
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
