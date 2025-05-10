@@ -6,6 +6,8 @@ clear_symbols = {
     'EVEN': 'EVEN3',
     'HYPERA': 'HYPE3',
     'ITAUUNIBANCO ON EJ N1': 'ITUB3',
+    'LOG COM PROP': 'LOGG3',
+    'PETRORECSA': 'RECV3',
 
     # FIIs
     'ITRI': 'ITRI11',
