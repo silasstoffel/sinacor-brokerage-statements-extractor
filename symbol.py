@@ -8,6 +8,7 @@ clear_symbols = {
     'ITAUUNIBANCO ON EJ N1': 'ITUB3',
     'LOG COM PROP': 'LOGG3',
     'PETRORECSA': 'RECV3',
+    'VALE ON NM': 'VALE3',
 
     # FIIs
     'ITRI': 'ITRI11',
@@ -19,6 +20,8 @@ clear_symbols = {
     'BARI11': 'BARI11',
     'BTHF11': 'BTHF11',
     'CLIN11': 'CLIN11',
+    'VINO11': 'VINO11',
+    'RVBI11': 'RVBI11',
 
     # ETFs
     'ISHARES SMAL CI': 'SMLL11',
