@@ -2,9 +2,16 @@ import pdfplumber
 import re
 import pandas as pd
 import sys
+import requests
+import os
+import json
 
-from symbol import search_symbol
+from dotenv import load_dotenv
+from symbol import search_symbol, search_symbol_type
 from datetime import datetime
+
+load_dotenv()
+
 def main():
     print("\n### Brokerage Statements Extractor ###\n")
     
@@ -41,7 +48,19 @@ def main():
     print("(!) Operation Total Value: R$", operation_total_value)
     print("#############################################")
 
+    is_unknown_item = is_unknown_value(operations)
+
+    if is_unknown_item:
+        print("")
+        print("###### Warning ######")
+        print("There is at least one operation with unknown value")
+        print("###### Warning ######")
+
     print("\nExtraction completed. Filename:", filename, "\n")
+
+    if is_unknown_item == False:
+        send_to_api(operations)
+        
 
 def extract_numeric_value(text, pattern, group = 1):
     match = re.compile(pattern).search(text)
@@ -65,9 +84,9 @@ def extract_operation_type(text):
     operation_type = (text.replace(b3, "").replace(bovespa, "")).strip()[:1]
 
     if operation_type == "C":
-        return "C"
+        return "buy"
     elif operation_type == "V":
-        return "V"
+        return "sell"
     
     return "UNKNOWN"
 
@@ -79,7 +98,9 @@ def extract_operations(text):
 
     match_operation_date = date_pattern.search(text.replace("\n", " "))
     if match_operation_date:
-        operation_date = match_operation_date.group(0)
+        brazilian_date = match_operation_date.group(0)
+        date = datetime.strptime(brazilian_date, "%d/%m/%Y")
+        operation_date = date.strftime("%Y-%m-%d")
 
     matches = pattern.findall(txt)
 
@@ -91,7 +112,6 @@ def extract_operations(text):
         quantity = int(values[0])
         unit_price = float(values[1].replace(".", "").replace(",", "."))
         total_value = float(values[2].replace(".", "").replace(",", "."))
-        #print("Raw Data:", raw_data)
 
         operations.append({
             "raw_data": raw_data, 
@@ -134,4 +154,48 @@ def to_csv(operations):
 
     return filename
 
+def is_unknown_value(operations):
+    for o in operations:
+        if o["operation_type"] == "UNKNOWN" or o["symbol"] == "UNKNOWN":
+            return True
+    
+    return False
+
+def send_to_api(operations):
+    if os.getenv("INTEGRATE_TO_API") != "true":
+        print("Integration to API is disabled")
+        return
+    
+    env = os.getenv("ENVIRONMENT")
+    url = os.getenv("API_PRODUCTION_URL") if env == "production" else os.getenv("API_TEST_URL")
+
+    for operation in operations:
+        symbol = operation['symbol']
+        data = {
+            "type": search_symbol_type(symbol), 
+            "symbol": symbol,
+            "quantity": operation['quantity'],
+            "totalValue": operation['total_value'] + operation['costs'],
+            "cost": operation['costs'],
+            "operationType": operation['operation_type'],
+            "operationDate": operation['operation_date'],
+            "brokerage": "clear",
+            "redemption_policy_type" : "any_time",
+            "note": "source: sinacor-brokerage-statements-extractor" 
+        }
+        
+        print("[%s] Sending request" % (symbol))
+
+        response = requests.post(url, json=data, headers={"Content-Type": "application/json"})
+
+        if response.status_code != 202:
+            print("[%s] Failure request. Status: %s - Content: %s" % (symbol, response.status_code, response.json()))
+            print("[%s] Request body %s" % (symbol))
+            print(json.dumps(data))
+            continue
+
+        print("[%s] Success response -  %s" % (symbol, response.json()))
+
+    print("Sent all request to API")      
+        
 main()

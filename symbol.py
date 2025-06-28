@@ -28,6 +28,36 @@ clear_symbols = {
     'ISHARES BOVA CI': 'BOVA11',
 }
 
+symbol_types = {
+    # fiis
+    'ITRI11': 'fii',
+    'PORD11': 'fii',
+    'MALL11': 'fii',
+    'RFOF11': 'fii',
+    'IRDM11': 'fii',
+    'KNRI11': 'fii',
+    'BARI11': 'fii',
+    'BTHF11': 'fii',
+    'CLIN11': 'fii',
+    'VINO11': 'fii',
+    'RVBI11': 'fii',
+
+    #stocks
+    'MOVI3' : 'stock',
+    'BRSR6' : 'stock',
+    'MILS3' : 'stock',
+    'EVEN3' : 'stock',
+    'HYPE3' : 'stock',
+    'ITUB3' : 'stock',
+    'LOGG3' : 'stock',
+    'RECV3' : 'stock',
+    'VALE3' : 'stock',
+
+    # etfs
+    'SMLL11': 'eft',
+    'BOVA11': 'eft'
+}
+
 symbols = {
     'CLEAR': clear_symbols
 }
@@ -38,3 +68,7 @@ def search_symbol(text, exchange = 'CLEAR'):
             return symbol
         
     return "UNKNOWN"
+
+
+def search_symbol_type(symbol):
+    return symbol_types.get(symbol, "")
