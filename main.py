@@ -180,7 +180,7 @@ def send_to_api(operations):
             "operationType": operation['operation_type'],
             "operationDate": operation['operation_date'],
             "brokerage": "clear",
-            "redemption_policy_type" : "any_time",
+            "redemptionPolicyType" : "any_time",
             "note": "source: sinacor-brokerage-statements-extractor" 
         }
         
