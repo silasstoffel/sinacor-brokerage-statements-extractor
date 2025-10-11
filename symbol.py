@@ -9,6 +9,8 @@ clear_symbols = {
     'LOG COM PROP': 'LOGG3',
     'PETRORECSA': 'RECV3',
     'VALE ON NM': 'VALE3',
+    'BOA SAFRA': 'SOJA3',
+    'WIZ CO': 'WIZC3',
 
     # FIIs
     'ITRI': 'ITRI11',
@@ -22,6 +24,7 @@ clear_symbols = {
     'CLIN11': 'CLIN11',
     'VINO11': 'VINO11',
     'RVBI11': 'RVBI11',
+    'LVBI11': 'LVBI11',
 
     # ETFs
     'ISHARES SMAL CI': 'SMLL11',
@@ -41,6 +44,7 @@ symbol_types = {
     'CLIN11': 'fii',
     'VINO11': 'fii',
     'RVBI11': 'fii',
+    'LVBI11': 'fii',
 
     #stocks
     'MOVI3' : 'stock',
@@ -52,6 +56,8 @@ symbol_types = {
     'LOGG3' : 'stock',
     'RECV3' : 'stock',
     'VALE3' : 'stock',
+    'SOJA3' : 'stock',
+    'WIZC3' : 'stock',
 
     # etfs
     'SMLL11': 'eft',
