@@ -25,6 +25,7 @@ clear_symbols = {
     'VINO11': 'VINO11',
     'RVBI11': 'RVBI11',
     'LVBI11': 'LVBI11',
+    'KCRE11': 'KCRE11',
 
     # ETFs
     'ISHARES SMAL CI': 'SMLL11',
@@ -45,6 +46,7 @@ symbol_types = {
     'VINO11': 'fii',
     'RVBI11': 'fii',
     'LVBI11': 'fii',
+    'KCRE11': 'fii',
 
     #stocks
     'MOVI3' : 'stock',
