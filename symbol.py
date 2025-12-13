@@ -26,6 +26,8 @@ clear_symbols = {
     'RVBI11': 'RVBI11',
     'LVBI11': 'LVBI11',
     'KCRE11': 'KCRE11',
+    'HGBS11': 'HGBS11',
+    'FIIB11': 'FIIB11',
 
     # ETFs
     'ISHARES SMAL CI': 'SMLL11',
@@ -47,6 +49,8 @@ symbol_types = {
     'RVBI11': 'fii',
     'LVBI11': 'fii',
     'KCRE11': 'fii',
+    'HGBS11': 'fii',
+    'FIIB11': 'fii', 
 
     #stocks
     'MOVI3' : 'stock',
