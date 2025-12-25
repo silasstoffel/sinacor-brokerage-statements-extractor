@@ -28,6 +28,7 @@ clear_symbols = {
     'KCRE11': 'KCRE11',
     'HGBS11': 'HGBS11',
     'FIIB11': 'FIIB11',
+    'IRIM11': 'IRIM11',
 
     # ETFs
     'ISHARES SMAL CI': 'SMLL11',
@@ -51,6 +52,7 @@ symbol_types = {
     'KCRE11': 'fii',
     'HGBS11': 'fii',
     'FIIB11': 'fii', 
+    'IRIM11': 'fii', 
 
     #stocks
     'MOVI3' : 'stock',
